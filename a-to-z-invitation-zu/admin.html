@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard - Majlis Kesyukuran Perkahwinan A & Z</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="admin.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="img/logo1.ico" type="image/x-icon">
+  <style>
+    /* Sortable table styles */
+    .sortable-header {
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+      transition: background-color 0.2s ease;
+    }
+    
+    .sortable-header:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .sort-indicator {
+      margin-left: 5px;
+      opacity: 0.5;
+    }
+    
+    .sort-indicator.active {
+      opacity: 1;
+    }
+    
+    .rsvp-table th {
+      padding: 12px 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <a href="index.html" class="back-link">
+    <i class="fas fa-arrow-left"></i> Kembali ke Jemputan
+  </a>
+
+  <div class="main-content show">
+    <div class="section">
+      <div class="container">
+        
+        <!-- Admin Header -->
+        <div class="admin-header">
+          <h1 class="admin-title">Dashboard Admin</h1>
+          <p class="admin-subtitle">Maklumat RSVP - Majlis Kesyukuran Perkahwinan Zuhaira & Aiman</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="total-responses">-</div>
+            <div class="stat-label">Jumlah Respons</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="total-attending">-</div>
+            <div class="stat-label">Akan Hadir</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="total-guests">-</div>
+            <div class="stat-label">Jumlah Tetamu</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="total-wishes">-</div>
+            <div class="stat-label">Ucapan Diterima</div>
+          </div>
+        </div>
+
+        <!-- RSVP Data Section -->
+        <div class="refresh-section">
+          <h2 class="section-title">Senarai RSVP</h2>
+          <button class="btn btn-primary" onclick="loadRSVPData()">
+            <i class="fas fa-sync-alt"></i> Muat Semula Data
+          </button>
+        </div>
+
+        <div id="error-container"></div>
+
+        <div class="rsvp-table-container">
+          <div id="no-data" class="no-data" style="display: none;">
+            <i class="fas fa-inbox fa-3x" style="color: #ccc; margin-bottom: 1rem;"></i>
+            <p>Tiada data RSVP dijumpai. Sila pastikan spreadsheet mengandungi data.</p>
+          </div>
+          
+          <table class="rsvp-table" id="rsvp-table" style="display: none;">
+            <thead>
+              <tr>
+                <th class="sortable-header" data-column="timestamp">
+                  <i class="fas fa-calendar"></i> Masa
+                  <i class="fas fa-sort sort-indicator"></i>
+                </th>
+                <th class="sortable-header" data-column="attendance">
+                  <i class="fas fa-check-circle"></i> Status
+                  <i class="fas fa-sort sort-indicator"></i>
+                </th>
+                <th class="sortable-header" data-column="name">
+                  <i class="fas fa-user"></i> Nama
+                  <i class="fas fa-sort sort-indicator"></i>
+                </th>
+                <th class="sortable-header" data-column="phone">
+                  <i class="fas fa-phone"></i> Telefon
+                  <i class="fas fa-sort sort-indicator"></i>
+                </th>
+                <th class="sortable-header" data-column="guestCount">
+                  <i class="fas fa-users"></i> Bilangan
+                  <i class="fas fa-sort sort-indicator"></i>
+                </th>
+                <th class="sortable-header" data-column="wishes">
+                  <i class="fas fa-heart"></i> Ucapan
+                  <i class="fas fa-sort sort-indicator"></i>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="rsvp-tbody">
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Decorative Elements (same as main page) -->
+    <img src="img/filler2.png" class="corner-decoration bottom-left" alt="Flower Decoration">
+    <img src="img/filler1.png" class="corner-decoration top-right" alt="Flower Decoration">
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <p>Sedang memuatkan data RSVP...</p>
+    </div>
+  </div>
+
+  <script>
+    // RSVP Dashboard Configuration
+    const RSVP_CONFIG = {
+      sheetId: '1pGniIsCYrVZZav3XIEdD51XO-CSGsyWp7ESrLPA0UdE', // Your sheet ID
+      columns: {
+        timestamp: 0,
+        attendance: 1,
+        name: 2,
+        phone: 3,
+        guestCount: 4,
+        wishes: 5
+      }
+    };
+
+    // Dashboard functionality
+    class RSVPDashboard {
+      constructor() {
+        this.data = [];
+        this.sortColumn = null;
+        this.sortDirection = 'asc';
+        this.init();
+      }
+
+      init() {
+        this.loadRSVPData();
+        this.setupSortHandlers();
+      }
+
+      setupSortHandlers() {
+        const headers = document.querySelectorAll('.sortable-header');
+        headers.forEach(header => {
+          header.addEventListener('click', (e) => {
+            const column = header.getAttribute('data-column');
+            this.sortTable(column);
+          });
+        });
+      }
+
+      sortTable(column) {
+        // Toggle sort direction if clicking the same column
+        if (this.sortColumn === column) {
+          this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+          this.sortColumn = column;
+          this.sortDirection = 'asc';
+        }
+
+        this.updateSortIndicators();
+        this.renderTable();
+      }
+
+      updateSortIndicators() {
+        // Reset all indicators
+        document.querySelectorAll('.sort-indicator').forEach(indicator => {
+          indicator.className = 'fas fa-sort sort-indicator';
+        });
+
+        // Set active indicator
+        if (this.sortColumn) {
+          const activeHeader = document.querySelector(`[data-column="${this.sortColumn}"] .sort-indicator`);
+          if (activeHeader) {
+            activeHeader.className = `fas fa-sort-${this.sortDirection === 'asc' ? 'up' : 'down'} sort-indicator active`;
+          }
+        }
+      }
+
+      getSortedData() {
+        if (this.data.length <= 1 || !this.sortColumn) {
+          return this.data.slice(1); // Skip header row
+        }
+
+        const responses = this.data.slice(1); // Skip header row
+        
+        return responses.sort((a, b) => {
+          let aVal = a[RSVP_CONFIG.columns[this.sortColumn]] || '';
+          let bVal = b[RSVP_CONFIG.columns[this.sortColumn]] || '';
+
+          // Special handling for different column types
+          switch (this.sortColumn) {
+            case 'timestamp':
+              aVal = new Date(aVal).getTime() || 0;
+              bVal = new Date(bVal).getTime() || 0;
+              break;
+            
+            case 'guestCount':
+              aVal = parseInt(aVal) || 0;
+              bVal = parseInt(bVal) || 0;
+              break;
+            
+            case 'attendance':
+              // Sort by attendance status (attending first)
+              aVal = aVal.toLowerCase().includes('ya') ? 1 : 0;
+              bVal = bVal.toLowerCase().includes('ya') ? 1 : 0;
+              break;
+            
+            default:
+              // String comparison for name, phone, wishes
+              aVal = aVal.toString().toLowerCase();
+              bVal = bVal.toString().toLowerCase();
+          }
+
+          let result = 0;
+          if (aVal < bVal) result = -1;
+          else if (aVal > bVal) result = 1;
+
+          return this.sortDirection === 'desc' ? -result : result;
+        });
+      }
+
+      async loadRSVPData() {
+        this.showLoading();
+        this.clearError();
+        
+        try {
+          const csvUrl = `https://docs.google.com/spreadsheets/d/${RSVP_CONFIG.sheetId}/export?format=csv`;
+          const response = await fetch(csvUrl);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const csvText = await response.text();
+          this.data = this.parseCSV(csvText);
+          
+          this.updateStatistics();
+          this.renderTable();
+          
+        } catch (error) {
+          console.error('Error loading RSVP data:', error);
+          this.showError('Gagal memuatkan data RSVP. Sila semak sambungan internet dan cuba lagi.');
+        }
+        
+        this.hideLoading();
+      }
+
+      parseCSV(csvText) {
+        const lines = csvText.split('\n');
+        const result = [];
+        
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (line) {
+            // Simple CSV parsing - handle quoted fields
+            const cells = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let j = 0; j < line.length; j++) {
+              const char = line[j];
+              if (char === '"') {
+                inQuotes = !inQuotes;
+              } else if (char === ',' && !inQuotes) {
+                cells.push(current.trim());
+                current = '';
+              } else {
+                current += char;
+              }
+            }
+            cells.push(current.trim());
+            result.push(cells);
+          }
+        }
+        
+        return result;
+      }
+
+      updateStatistics() {
+        if (this.data.length <= 1) {
+          this.resetStats();
+          return;
+        }
+
+        const responses = this.data.slice(1); // Skip header row
+        let totalAttending = 0;
+        let totalGuests = 0;
+        let totalWishes = 0;
+
+        responses.forEach(row => {
+          const attendance = row[RSVP_CONFIG.columns.attendance] || '';
+          const guestCount = parseInt(row[RSVP_CONFIG.columns.guestCount]) || 0;
+          const wishes = row[RSVP_CONFIG.columns.wishes] || '';
+
+          if (attendance.toLowerCase().includes('ya')) {
+            totalAttending++;
+            totalGuests += guestCount;
+          }
+
+          if (wishes.trim()) {
+            totalWishes++;
+          }
+        });
+
+        document.getElementById('total-responses').textContent = responses.length;
+        document.getElementById('total-attending').textContent = totalAttending;
+        document.getElementById('total-guests').textContent = totalGuests;
+        document.getElementById('total-wishes').textContent = totalWishes;
+      }
+
+      resetStats() {
+        document.getElementById('total-responses').textContent = '0';
+        document.getElementById('total-attending').textContent = '0';
+        document.getElementById('total-guests').textContent = '0';
+        document.getElementById('total-wishes').textContent = '0';
+      }
+
+      renderTable() {
+        const tbody = document.getElementById('rsvp-tbody');
+        const table = document.getElementById('rsvp-table');
+        const noData = document.getElementById('no-data');
+
+        if (this.data.length <= 1) {
+          table.style.display = 'none';
+          noData.style.display = 'block';
+          return;
+        }
+
+        noData.style.display = 'none';
+        table.style.display = 'table';
+
+        const responses = this.getSortedData();
+        tbody.innerHTML = responses.map(row => {
+          const timestamp = this.formatTimestamp(row[RSVP_CONFIG.columns.timestamp] || '');
+          const attendance = row[RSVP_CONFIG.columns.attendance] || '';
+          const name = row[RSVP_CONFIG.columns.name] || '';
+          const phone = row[RSVP_CONFIG.columns.phone] || '';
+          const guestCount = row[RSVP_CONFIG.columns.guestCount] || '0';
+          const wishes = row[RSVP_CONFIG.columns.wishes] || '';
+
+          const isAttending = attendance.toLowerCase().includes('ya');
+          const statusBadge = isAttending ? 
+            `<span class="status-badge status-yes">Hadir</span>` :
+            `<span class="status-badge status-no">Tidak Hadir</span>`;
+
+          return `
+            <tr>
+              <td>${this.escapeHtml(timestamp)}</td>
+              <td>${statusBadge}</td>
+              <td><strong>${this.escapeHtml(name)}</strong></td>
+              <td>${this.escapeHtml(phone)}</td>
+              <td><span class="guest-count">${this.escapeHtml(guestCount)} orang</span></td>
+              <td><div class="wish-preview">${this.escapeHtml(wishes)}</div></td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      formatTimestamp(timestamp) {
+        if (!timestamp) return '';
+        
+        try {
+          const date = new Date(timestamp);
+          return date.toLocaleString('ms-MY', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        } catch (e) {
+          return timestamp;
+        }
+      }
+
+      escapeHtml(unsafe) {
+        if (!unsafe) return '';
+        return unsafe.toString()
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      showLoading() {
+        document.getElementById('loading-overlay').style.display = 'flex';
+      }
+
+      hideLoading() {
+        document.getElementById('loading-overlay').style.display = 'none';
+      }
+
+      showError(message) {
+        const errorContainer = document.getElementById('error-container');
+        errorContainer.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle"></i> ${message}</div>`;
+      }
+
+      clearError() {
+        document.getElementById('error-container').innerHTML = '';
+      }
+    }
+
+    // Global function for refresh button
+    function loadRSVPData() {
+      if (window.dashboard) {
+        window.dashboard.loadRSVPData();
+      }
+    }
+
+    // Initialize dashboard when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      window.dashboard = new RSVPDashboard();
+    });
+  </script>
+</body>
+</html>

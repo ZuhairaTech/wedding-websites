@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Senarai Hadiah - Majlis Kesyukuran Perkahwinan A & Z</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #5a4a42;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 500;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    .back-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      text-align: center;
+      padding: 40px 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+      color: #d4a574;
+      margin: 0 0 10px 0;
+    }
+
+    .page-subtitle {
+      color: #5a4a42;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    .gifts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 20px 0;
+    }
+
+    .gift-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .gift-card.taken {
+      opacity: 0.6;
+    }
+
+    .gift-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #f0f0f0;
+    }
+
+    .gift-content {
+      padding: 20px;
+    }
+
+    .gift-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #5a4a42;
+      margin: 0 0 10px 0;
+    }
+
+    .gift-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .gift-status.available {
+      background: #e8f5e9;
+      color: #2e7d32;
+      cursor: pointer;
+    }
+
+    .gift-status.available:hover {
+      background: #c8e6c9;
+      transform: translateY(-2px);
+    }
+
+    .gift-status.taken {
+      background: #ffebee;
+      color: #c62828;
+      cursor: default;
+    }
+
+    .gift-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .gift-card.taken .gift-overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .taken-badge {
+      background: white;
+      color: #c62828;
+      padding: 15px 25px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .taken-badge:hover {
+      background: #fff3f3;
+      border-color: #c62828;
+      transform: scale(1.05);
+    }
+
+    .link-badge {
+      background: #d4a574;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .link-badge:hover {
+      background: #c4956a;
+      border-color: #fff;
+      transform: scale(1.05);
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      display: none;
+    }
+
+    .loading-content {
+      text-align: center;
+      color: white;
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255,255,255,0.3);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      background: #ffebee;
+      color: #c62828;
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .success-message {
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+
+    .refresh-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: #d4a574;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #c4956a;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(212, 165, 116, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 2rem;
+      }
+
+      .gifts-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a href="index.html" class="back-link">
+    <i class="fas fa-arrow-left"></i> Kembali ke Jemputan
+  </a>
+
+  <div class="main-content show">
+    <div class="page-header">
+      <h1 class="page-title">Senarai Hadiah</h1>
+      <p class="page-subtitle">Sila klik pada hadiah yang ingin anda berikan. Kehadiran anda sebenarnya sudah cukup menggembirakan kami, namun jika anda berhasrat untuk membawa hadiah, apa sahaja sangat kami hargai — termasuk kad ucapan ringkas. Senarai di bawah disediakan sekiranya anda ingin membeli sesuatu tanpa berlaku pertindihan. Mohon elakkan daripada menekan 'Batal' jika hadiah tersebut telah ditempah oleh tetamu lain.</p>
+    </div>
+
+    <div class="refresh-section">
+      <button class="btn btn-primary" onclick="loadGifts()">
+        <i class="fas fa-sync-alt"></i> Muat Semula
+      </button>
+    </div>
+
+    <div id="error-container"></div>
+
+    <div id="no-data" class="no-data" style="display: none;">
+      <i class="fas fa-gift fa-3x" style="color: #ccc; margin-bottom: 1rem;"></i>
+      <p>Tiada senarai hadiah dijumpai. Sila hubungi pentadbir.</p>
+    </div>
+
+    <div class="gifts-grid" id="gifts-grid"></div>
+  </div>
+
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <p>Sedang memuatkan senarai hadiah...</p>
+    </div>
+  </div>
+
+  <script>
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbySXuxw3QLmsW6CEWHQcd0TfVaUt2mzlNcEINMuUnLIBIw3NsF0plxBtkTC1Hs7cO-XAw/exec';
+
+    class GiftsRegistry {
+      constructor() {
+        this.gifts = [];
+        this.init();
+      }
+
+      init() {
+        this.loadGifts();
+      }
+
+      async loadGifts() {
+        this.showLoading();
+        this.clearMessages();
+
+        try {
+          const url = `${WEB_APP_URL}?action=getGifts`;
+          const response = await fetch(url);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          
+          if (!data.success) {
+            throw new Error(data.error || 'Failed to load gifts');
+          }
+
+          this.gifts = data.gifts || [];
+
+          if (this.gifts.length === 0) {
+            this.showNoData();
+          } else {
+            this.renderGifts();
+          }
+          
+        } catch (error) {
+          console.error('Error loading gifts:', error);
+          this.showError('Gagal memuatkan senarai hadiah. Sila semak sambungan internet dan cuba lagi.');
+        }
+
+        this.hideLoading();
+      }
+
+      renderGifts() {
+        const grid = document.getElementById('gifts-grid');
+        const noData = document.getElementById('no-data');
+
+        noData.style.display = 'none';
+
+        grid.innerHTML = this.gifts.map(gift => `
+          <div class="gift-card ${gift.taken ? 'taken' : ''}" 
+               data-row="${gift.rowIndex}">
+            <img src="${this.escapeHtml(gift.imageUrl)}" 
+                 alt="${this.escapeHtml(gift.name)}" 
+                 class="gift-image"
+                 onerror="this.src='https://via.placeholder.com/400x300/d4a574/ffffff?text=${encodeURIComponent(gift.name)}'">
+            <div class="gift-content">
+              <h3 class="gift-name">${this.escapeHtml(gift.name)}</h3>
+              <span class="gift-status ${gift.taken ? 'taken' : 'available'}"
+                    ${!gift.taken ? `onclick="giftsRegistry.toggleGift(${gift.rowIndex}, false)"` : ''}>
+                <i class="fas ${gift.taken ? 'fa-check-circle' : 'fa-gift'}"></i>
+                ${gift.taken ? 'Sudah ditempah' : 'Tempah'}
+              </span>
+            </div>
+            ${gift.taken ? `
+              <div class="gift-overlay">
+                <div class="taken-badge"
+                     onclick="giftsRegistry.toggleGift(${gift.rowIndex}, true)">
+                  <i class="fas fa-lock"></i> Batal Tempahan
+                </div>
+                ${gift.shopeeUrl ? `
+                  <a class="link-badge"
+                     href="${this.escapeHtml(gift.shopeeUrl)}"
+                     target="_blank"
+                     onclick="event.stopPropagation();">
+                    <i class="fas fa-external-link-alt"></i> Lihat Produk
+                  </a>
+                ` : ''}
+              </div>
+            ` : ''}
+          </div>
+        `).join('');
+      }
+
+      async toggleGift(rowIndex, currentlyTaken) {
+        const giftName = this.gifts.find(g => g.rowIndex === rowIndex)?.name || 'hadiah ini';
+        
+        let confirmed;
+        if (currentlyTaken) {
+          confirmed = confirm(`Adakah anda ingin MEMBATAL tempahan "${giftName}"?`);
+        } else {
+          confirmed = confirm(`Adakah anda ingin menempah "${giftName}"?`);
+        }
+        
+        if (!confirmed) return;
+
+        this.showLoading();
+
+        try {
+          const url = `${WEB_APP_URL}?action=toggleGift&row=${rowIndex}`;
+          
+          const response = await fetch(url, {
+            method: 'POST'
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+
+          if (!data.success) {
+            throw new Error(data.error || 'Failed to reserve gift');
+          }
+
+          await this.loadGifts();
+          
+          const successMsg = currentlyTaken 
+            ? `Tempahan "${giftName}" telah dibatalkan.`
+            : `Terima kasih! "${giftName}" telah berjaya ditempah.`;
+          
+          this.showSuccess(successMsg);
+
+        } catch (error) {
+          console.error('Error toggling gift:', error);
+          
+          if (error.message.includes('already taken')) {
+            this.showError('Maaf, hadiah ini baru sahaja ditempah oleh tetamu lain. Sila pilih hadiah lain.');
+          } else {
+            this.showError('Gagal menempah hadiah. Sila cuba lagi.');
+          }
+          
+          await this.loadGifts();
+        }
+
+        this.hideLoading();
+      }
+
+      showNoData() {
+        document.getElementById('gifts-grid').innerHTML = '';
+        document.getElementById('no-data').style.display = 'block';
+      }
+
+      escapeHtml(unsafe) {
+        if (!unsafe) return '';
+        return unsafe.toString()
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      showLoading() {
+        document.getElementById('loading-overlay').style.display = 'flex';
+      }
+
+      hideLoading() {
+        document.getElementById('loading-overlay').style.display = 'none';
+      }
+
+      showError(message) {
+        const errorContainer = document.getElementById('error-container');
+        errorContainer.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle"></i> ${message}</div>`;
+        
+        setTimeout(() => {
+          this.clearMessages();
+        }, 5000);
+      }
+
+      showSuccess(message) {
+        const errorContainer = document.getElementById('error-container');
+        errorContainer.innerHTML = `<div class="success-message"><i class="fas fa-check-circle"></i> ${message}</div>`;
+        
+        setTimeout(() => {
+          this.clearMessages();
+        }, 5000);
+      }
+
+      clearMessages() {
+        document.getElementById('error-container').innerHTML = '';
+      }
+    }
+
+    function loadGifts() {
+      if (window.giftsRegistry) {
+        window.giftsRegistry.loadGifts();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      window.giftsRegistry = new GiftsRegistry();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+/* Additional styles for admin dashboard */
+    .admin-header {
+      text-align: center;
+      padding: 2rem 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .admin-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.5rem;
+      color: #8B4513;
+      margin-bottom: 0.5rem;
+    }
+    
+    .admin-subtitle {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.1rem;
+      color: #666;
+      font-weight: 500;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #8B4513;
+      font-family: 'Quicksand', sans-serif;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: #666;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .rsvp-table-container {
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      border-radius: 15px;
+      padding: 1.5rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      overflow-x: auto;
+    }
+    
+    .rsvp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Quicksand', sans-serif;
+    }
+    
+    .rsvp-table th {
+      background: rgba(139, 69, 19, 0.1);
+      color: #8B4513;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid rgba(139, 69, 19, 0.2);
+      position: sticky;
+      top: 0;
+    }
+    
+    .rsvp-table td {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      vertical-align: top;
+    }
+    
+    .rsvp-table tr:hover {
+      background: rgba(139, 69, 19, 0.05);
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .status-yes {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status-no {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .guest-count {
+      background: #fff3cd;
+      color: #856404;
+      padding: 0.2rem 0.6rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .wish-preview {
+      max-width: 200px;
+      max-height: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.4;
+      font-style: italic;
+      color: #666;
+    }
+    
+    .refresh-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 2rem;
+      color: #8B4513;
+      margin: 0 auto;
+    }
+    
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .loading-content {
+      text-align: center;
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #8B4513;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .error-message {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .no-data {
+      text-align: center;
+      padding: 3rem;
+      color: #666;
+      font-style: italic;
+    }
+
+    .back-link {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(139, 69, 19, 0.9);
+      color: white;
+      padding: 0.8rem 1.2rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+    
+    .back-link:hover {
+      background: rgba(139, 69, 19, 1);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .rsvp-table-container {
+        padding: 1rem;
+      }
+      
+      .rsvp-table {
+        font-size: 0.9rem;
+      }
+      
+      .rsvp-table th,
+      .rsvp-table td {
+        padding: 0.6rem 0.5rem;
+      }
+      
+      .wish-preview {
+        max-width: 150px;
+      }
+      
+      .admin-title {
+        font-size: 2rem;
+      }
+    }
