@@ -563,13 +563,13 @@ export default function WeddingInviteMaroonCream() {
 
                           <div className="mt-3 flex flex-col items-center text-center text-[#7d5c55]">
                             <span className="text-sm md:text-base font-semibold tracking-wide uppercase">
-                              Nama Bapa
+                              MOHD ASRI BIN JUSOH
                             </span>
 
                             <span className="my-1 text-sm md:text-base text-[#c8a390]">&</span>
 
                             <span className="text-sm md:text-base font-semibold tracking-wide uppercase">
-                              Nama Ibu
+                              MARIAH BINTI ABDULLAH
                             </span>
                           </div>
 

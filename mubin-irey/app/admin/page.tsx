@@ -119,8 +119,13 @@ export default function AdminPage() {
 
   const summary = useMemo(() => {
     const attending = data.filter((item) => item.attendance.toLowerCase() === "ya");
-    const totalPax = attending.reduce((sum, item) => sum + Number(item.pax || 0), 0);
+    const totalPax = attending.reduce((sum, item) => {
+      const match = item.pax.match(/\d+/);
+      const paxNumber = match ? Number(match[0]) : 0;
 
+      return sum + paxNumber;
+    }, 0);
+    
     return {
       totalResponses: data.length,
       totalAttending: attending.length,
