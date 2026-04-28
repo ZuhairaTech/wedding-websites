@@ -594,9 +594,19 @@ export default function WeddingInviteMaroonCream() {
 
                           <div className="my-6 h-px bg-gradient-to-r from-transparent via-[#d9b7a5] to-transparent" />
 
-
                           <p className="mt-3 text-sm md:text-base leading-8 text-[#7d5c55] text-center">
-                            pada 4 September 2026 bersamaan 22 Rabiulawal 1448 H di Kampung Bendang Pak Yong, Tumpat, Kelantan.
+                            pada{" "}
+                            <span className="font-semibold text-[#3b0d17]">
+                              4 September 2026
+                            </span>{" "}
+                            bersamaan{" "}
+                            <span className="font-semibold text-[#3b0d17]">
+                              22 Rabiulawal 1448 H
+                            </span>{" "}
+                            di{" "}
+                            <span className="font-semibold text-[#3b0d17]">
+                              Kampung Bendang Pak Yong, Tumpat, Kelantan
+                            </span>.
                           </p>
 
                           <p className="mt-3 text-sm md:text-base leading-8 text-[#7d5c55] text-center">
