@@ -1,0 +1,4 @@
+Font: #c8a390
+Theme (main): #3b0d17
+Hints (sub): #fff8f3
+
