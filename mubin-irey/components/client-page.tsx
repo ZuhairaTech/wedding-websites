@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useRef, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Heart,
@@ -336,6 +336,21 @@ export default function WeddingInviteMaroonCream() {
   const [wishesLoading, setWishesLoading] = useState(true);
   const [wishesError, setWishesError] = useState("");
 
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const toggleMusic = () => {
+    if (!audioRef.current) return;
+
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+
+    setIsPlaying(!isPlaying);
+  };
+
   const [introStage, setIntroStage] = useState<IntroStage>("closed");
   const countdown = useCountdown(eventDate);
   const [activeMap, setActiveMap] = useState<"google" | "waze">("google");
@@ -348,6 +363,46 @@ export default function WeddingInviteMaroonCream() {
     ],
     [countdown]
   );
+
+    useEffect(() => {
+      const handleLeave = () => {
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+        }
+      };
+
+      window.addEventListener("beforeunload", handleLeave);
+
+      return () => {
+        window.removeEventListener("beforeunload", handleLeave);
+      };
+    }, []);
+
+    useEffect(() => {
+    if (introStage === "opened" && audioRef.current) {
+      audioRef.current.play();
+      setIsPlaying(true);
+    }
+  }, [introStage]);
+
+  useEffect(() => {
+  const handleVisibilityChange = () => {
+    if (!audioRef.current) return;
+
+    if (document.hidden) {
+      audioRef.current.pause();
+    } else if (isPlaying) {
+      audioRef.current.play();
+    }
+  };
+
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+
+  return () => {
+    document.removeEventListener("visibilitychange", handleVisibilityChange);
+  };
+}, [isPlaying]);
 
   const loadWishes = async () => {
     try {
@@ -396,16 +451,39 @@ export default function WeddingInviteMaroonCream() {
   };
 
   return (
+    
     <div className="min-h-screen bg-[#3b0d17] overflow-x-hidden">
-      <EnvelopeIntro stage={introStage} onOpen={handleOpenEnvelope} />
+    <EnvelopeIntro stage={introStage} onOpen={handleOpenEnvelope} />
 
-      <main
-        className={`relative z-[46] transition-opacity duration-500 delay-[800ms] ${
-          introStage === "opened" ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-      >
+    <main
+      className={`relative z-[46] transition-opacity duration-500 delay-[800ms] ${
+        introStage === "opened" ? "opacity-100" : "opacity-0 pointer-events-none"
+      }`}
+    >
+       <main
+          className={`relative z-[46] transition-opacity duration-500 delay-[800ms] ${
+            introStage === "opened" ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+        >
+          <audio ref={audioRef} loop>
+            <source src="/music.mp3" type="audio/mpeg" />
+          </audio>
+
+          {/* WAX ON TOP EDGE OF MAIN LETTER */}
+          <img
+            src="/wax.png"
+            alt=""
+            className="absolute top-12 md:top-14 left-1/2 -translate-x-1/2
+                      w-[75px] md:w-[95px]
+                      z-[60]
+                      drop-shadow-[0_6px_10px_rgba(0,0,0,0.25)]
+                      pointer-events-none select-none"
+          />
+        </main>
+
         <div className="pt-20 md:pt-24 pb-14 px-4 md:px-8">
           <div className="mx-auto w-[92vw] max-w-[1120px] min-h-[82vh] rounded-[34px] relative overflow-hidden bg-[#fffdfb]">
+            
             <div className="absolute inset-0">
               {/* FIXED CORNER FLOWERS */}
               <img
@@ -450,26 +528,18 @@ export default function WeddingInviteMaroonCream() {
                         className="flex flex-col gap-5"
                       >
 
-                        <PaperFrame className="p-6 md:p-7 rotate-[-1deg] bg-[#fffdfb] border border-[#efe2d8] ">
+                        <PaperFrame className="p-6 md:p-7 bg-[#fffdfb] border border-[#efe2d8] ">
                           
                            {/* CORNER DECOR */}
-                          <div className="absolute -top-6 -left-6 z-20 pointer-events-none select-none">
+                          <div className="absolute -top-4 -left-4 md:-top-6 md:-left-6 z-20 pointer-events-none select-none">
 
-                          {/* Ribbon */}
-                          <img
-                            src="/ribbon.png"
-                            alt=""
-                            className="relative left-3 top-4 w-[140px] md:w-[160px] "
-                          />
+                            {/* <img
+                              src="/flower3.png"
+                              alt=""
+                              className=" top-[6px] left-[8px] md:top-[25px] md:left-[14px] w-[45px] md:w-[75px] rotate-[-8deg]"
+                            /> */}
 
-                          {/* Wax */}
-                          <img
-                            src="/wax.png"
-                            alt=""
-                            className="absolute top-[10px] left-[14px] w-[80px] md:w-[70px] rotate-[-8deg]"
-                          />
-
-                        </div>
+                          </div>
 
                           <div className="flex items-center gap-2 text-[#3b0d17] mb-4">
                           </div>
@@ -522,6 +592,9 @@ export default function WeddingInviteMaroonCream() {
                             <span>{couple.bride}</span>
                           </h1>
 
+                          <div className="my-6 h-px bg-gradient-to-r from-transparent via-[#d9b7a5] to-transparent" />
+
+
                           <p className="mt-3 text-sm md:text-base leading-8 text-[#7d5c55] text-center">
                             pada 4 September 2026 bersamaan 22 Rabiulawal 1448 H di Kampung Bendang Pak Yong, Tumpat, Kelantan.
                           </p>
@@ -529,7 +602,6 @@ export default function WeddingInviteMaroonCream() {
                           <p className="mt-3 text-sm md:text-base leading-8 text-[#7d5c55] text-center">
                             Semoga dengan kehadiran Tuan / Puan / Encik / Cik menjadi penyeri majlis dan membawa berkat sepanjang hayat mereka.                          </p>
 
-                          <div className="my-6 h-px bg-gradient-to-r from-transparent via-[#d9b7a5] to-transparent" />
 
                         </PaperFrame>
                       </motion.div>
@@ -866,6 +938,17 @@ export default function WeddingInviteMaroonCream() {
                   </PaperFrame>
                 </div>
               </section>
+
+              <button
+                onClick={toggleMusic}
+                className="fixed bottom-6 right-6 z-[70] 
+                          w-12 h-12 rounded-full 
+                          bg-[#3b0d17] text-[#fff8f3]
+                          flex items-center justify-center
+                          shadow-lg hover:opacity-90 transition"
+              >
+                {isPlaying ? "🔊" : "🔇"}
+              </button>
 
               <footer className="pt-2">
                 <div className="max-w-6xl mx-auto text-center">
