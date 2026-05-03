@@ -81,4 +81,32 @@ a {
     max-height: none !important;
     overflow: visible !important;
   }
+
+  /* Elegant scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 13, 23, 0.25); /* maroon soft */
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 13, 23, 0.45);
+}
+
+/* Hide scrollbar until hover */
+.group::-webkit-scrollbar-thumb {
+  opacity: 0;
+}
+
+.group:hover::-webkit-scrollbar-thumb {
+  opacity: 1;
+}
 }

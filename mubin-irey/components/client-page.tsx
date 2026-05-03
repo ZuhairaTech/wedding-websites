@@ -271,7 +271,7 @@ function PaperFrame({ children, className = "" }: PaperFrameProps) {
       className={`relative rounded-[2rem] bg-[#fffaf7]/95 ${className}`}
     >
       <div className="absolute inset-3 rounded-[1.45rem] pointer-events-none" />
-      <div className="relative">{children}</div>
+      <div className="relative h-full flex flex-col">{children}</div>
     </div>
   );
 }
@@ -868,86 +868,60 @@ export default function WeddingInviteMaroonCream() {
 
 <FullWidthDivider />
 
-              {/* <section className="pb-10 md:pb-16">
-                <div className="max-w-6xl mx-auto">
-                  <SectionHeading
-                    eyebrow="Gallery"
-                    title="A curated frame wall, not a busy album"
-                    description="Your current site already includes a gallery, countdown, venue links, and RSVP. This refresh keeps only the strongest pieces and presents them in a more refined way."
-                  />
-                </div>
-              </section> */}
+             <section id="wishes" className="pb-8 md:pb-16">
+              <div className="max-w-5xl mx-auto">
+                <PaperFrame className="p-5 md:p-8 bg-[#fffdfb] border border-[#ead7ca] h-[72svh] md:h-[620px] overflow-hidden">
+                  
+                  <div className="text-center shrink-0">
+                    <p className="uppercase tracking-[0.35em] text-[10px] md:text-xs text-[#c8a390] mb-2">
+                      Ucapan & Doa
+                    </p>
 
-              <section id="wishes" className="pb-10 md:pb-16">
-                <div className="max-w-5xl mx-auto">
-                  <PaperFrame className="p-6 md:p-10 bg-transparent border border-[#ead7ca]">
-                    <div className="text-center mb-8">
-                      <p className="uppercase tracking-[0.35em] text-xs text-[#c8a390] mb-3">
-                        Ucapan & Doa
-                      </p>
+                    <h3 className="font-serif text-3xl md:text-4xl leading-tight text-[#3b0d17]">
+                      Titipan Buat Pengantin
+                    </h3>
 
-                      <h3 className="font-serif text-3xl md:text-5xl text-[#3b0d17]">
-                        Titipan Buat Pengantin
-                      </h3>
+                    <p className="mt-3 text-sm md:text-base leading-7 text-[#7d5c55] max-w-2xl mx-auto">
+                      Terima kasih atas ucapan, doa dan ingatan tulus daripada keluarga serta sahabat handai.
+                    </p>
 
-                      <p className="mt-4 text-sm md:text-base leading-8 text-[#7d5c55] max-w-2xl mx-auto">
-                        Terima kasih atas ucapan, doa dan ingatan tulus daripada keluarga serta sahabat handai.
-                      </p>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={loadWishes}
+                      className="mt-4 rounded-full border border-[#ead7ca] bg-[#fff8f3] px-5 py-2.5 text-sm text-[#3b0d17] hover:bg-[#f4e5db] transition"
+                    >
+                      Muat Semula Ucapan
+                    </button>
+                  </div>
 
-                    <div className="flex justify-center mb-6">
-                      <button
-                        type="button"
-                        onClick={loadWishes}
-                        className="rounded-full border border-[#ead7ca] bg-[#fff8f3] px-5 py-3 text-sm text-[#3b0d17] hover:bg-[#f4e5db] transition"
-                      >
-                        Muat Semula Ucapan
-                      </button>
-                    </div>
+                  <div className="relative mt-5 flex-1 min-h-0 overflow-hidden">
+                    <div className="h-full overflow-y-auto overflow-x-hidden pr-2 overscroll-contain scroll-smooth">
+                      <div className="space-y-3">
+                       {wishes.map((item, index) => (
+                        <div
+                          key={index}
+                        >
+                          <p className="relative pl-5 text-[#7d5c55] italic leading-6 text-sm md:text-base">
+                            <span className="absolute left-0 top-0 text-[#d9b7a5] text-xl leading-none">
+                              ”
+                            </span>
+                            {item.wish}
+                          </p>
 
-                    {wishesLoading && (
-                      <p className="text-center text-[#7d5c55]">
-                        Sedang memuatkan ucapan...
-                      </p>
-                    )}
-
-                    {wishesError && (
-                      <p className="text-center text-[#9b2c2c]">
-                        {wishesError}
-                      </p>
-                    )}
-
-                    {!wishesLoading && !wishesError && wishes.length === 0 && (
-                      <p className="text-center text-[#7d5c55]">
-                        Belum ada ucapan buat masa ini.
-                      </p>
-                    )}
-
-                   <div className="relative">
-                    <div className="max-h-[420px] md:max-h-[520px] overflow-y-auto overflow-x-hidden pr-2">
-                      <div className="grid md:grid-cols-2 gap-4">
-                        {wishes.map((item, index) => (
-                          <div
-                            key={index}
-                            className="rounded-[1.5rem]  p-5"
-                          >
-                            <p className=" leading-8 text-sm md:text-base">
-                              {item.wish} — {item.name}
-                            </p>
-                          </div>
-                        ))}
+                          <p className="mt-2 text-right font-serif text-sm md:text-base text-[#3b0d17]">
+                            — {item.name}
+                          </p>
+                        </div>
+                      ))}
                       </div>
                     </div>
-                    {/* TOP FADE */}
-                    <div className="pointer-events-none absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-[#fffdfb] to-transparent z-10" />
 
-                    {/* BOTTOM FADE */}
-                    <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#fffdfb] to-transparent z-10" />
-
+                    <div className="pointer-events-none absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-[#fffdfb] to-transparent z-10" />
+                    <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-[#fffdfb] to-transparent z-10" />
                   </div>
-                  </PaperFrame>
-                </div>
-              </section>
+                </PaperFrame>
+              </div>
+            </section>
 
               <button
                 onClick={toggleMusic}
