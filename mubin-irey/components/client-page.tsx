@@ -826,7 +826,7 @@ export default function WeddingInviteMaroonCream() {
         <div className="overflow-hidden rounded-[1.5rem] border border-[#ead7ca] bg-white">
           {activeMap === "google" ? (
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3966.689226527842!2d102.08616699999999!3d6.1723479999999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNsKwMTAnMjAuNSJOIDEwMsKwMDUnMTAuMiJF!5e0!3m2!1sen!2smy!4v1747293989024!5m2!1sen!2smy"
+              src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3966.6881708243213!2d102.085426!3d6.172489!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNsKwMTAnMjEuMCJOIDEwMsKwMDUnMDcuNSJF!5e0!3m2!1sen!2smy!4v1777899594557!5m2!1sen!2smy"
               className="w-full h-[320px] md:h-[420px]"
               allowFullScreen
               loading="lazy"
@@ -834,7 +834,7 @@ export default function WeddingInviteMaroonCream() {
             />
           ) : (
             <iframe
-              src="https://embed.waze.com/iframe?zoom=16&lat=6.172276&lon=102.086377&ct=livemap&pin=1&desc=Target%20Location&navigate=yes"
+              src="https://embed.waze.com/iframe?zoom=16&lat=6.172202&lon=102.085530&ct=livemap&pin=1&desc=Target%20Location&navigate=yes"
               className="w-full h-[320px] md:h-[420px]"
               allowFullScreen
             />
@@ -845,7 +845,7 @@ export default function WeddingInviteMaroonCream() {
       {/* QUICK LINKS */}
       <div className="mt-6 flex flex-wrap gap-3">
         <a
-          href="https://maps.app.goo.gl/"
+          href="https://maps.app.goo.gl/GrJxQZL8QqckbL1y5"
           target="_blank"
           rel="noreferrer noopener"
           className="inline-flex items-center gap-2 rounded-full bg-[#3b0d17] text-[#fff8f3] px-5 py-3 text-sm hover:opacity-90 transition"
@@ -854,7 +854,7 @@ export default function WeddingInviteMaroonCream() {
         </a>
 
         <a
-          href="https://www.waze.com/"
+          href="https://ul.waze.com/ul?ll=6.17220165%2C102.08552957&navigate=yes&zoom=17&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location"
           target="_blank"
           rel="noreferrer noopener"
           className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm text-[#3b0d17] border border-[#ead7ca] hover:bg-[#fff8f3] transition"
@@ -892,11 +892,30 @@ export default function WeddingInviteMaroonCream() {
                     >
                       Muat Semula Ucapan
                     </button>
+
+                    {wishesLoading && (
+                      <p className="text-center text-[#7d5c55]">
+                        Sedang memuatkan ucapan...
+                      </p>
+                    )}
+
+                    {wishesError && (
+                      <p className="text-center text-[#9b2c2c]">
+                        {wishesError}
+                      </p>
+                    )}
                   </div>
 
                   <div className="relative mt-5 flex-1 min-h-0 overflow-hidden">
                     <div className="h-full overflow-y-auto overflow-x-hidden pr-2 overscroll-contain scroll-smooth">
                       <div className="space-y-3">
+
+                        {!wishesLoading && !wishesError && wishes.length === 0 && (
+                          <p className="text-center text-[#7d5c55]">
+                            Belum ada ucapan buat masa ini.
+                          </p>
+                        )}
+                        
                        {wishes.map((item, index) => (
                         <div
                           key={index}
@@ -913,6 +932,8 @@ export default function WeddingInviteMaroonCream() {
                           </p>
                         </div>
                       ))}
+
+                      
                       </div>
                     </div>
 
