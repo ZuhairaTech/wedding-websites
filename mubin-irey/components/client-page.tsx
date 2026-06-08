@@ -405,39 +405,71 @@ export default function WeddingInviteMaroonCream() {
 }, [isPlaying]);
 
   const loadWishes = async () => {
-    try {
-      setWishesLoading(true);
-      setWishesError("");
+  try {
+    setWishesLoading(true);
+    setWishesError("");
 
-      const sheetUrl =
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8PYAw87bSgiUPN1flygDlaQuPn3fB7BEPVJtGuxJDSwj8JmAZHAAjN0PcDPhjceyd1JKBAORxHMAb/pub?gid=1547346854&single=true&output=csv";
+    const sheetUrl =
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8PYAw87bSgiUPN1flygDlaQuPn3fB7BEPVJtGuxJDSwj8JmAZHAAjN0PcDPhjceyd1JKBAORxHMAb/pub?gid=1547346854&single=true&output=csv";
 
-      const response = await fetch(sheetUrl);
-      const text = await response.text();
+    const response = await fetch(sheetUrl);
+    const text = await response.text();
 
-      const rows = text
-        .split("\n")
-        .map((row) =>
-          row
-            .split(",")
-            .map((cell) => cell.replace(/^"|"$/g, "").trim())
-        );
+    const parseCSV = (csvText) => {
+      const rows = [];
+      let row = [];
+      let cell = "";
+      let insideQuotes = false;
 
-      const data = rows
-        .slice(1)
-        .map((row) => ({
-          name: row[2] || "Tetamu",
-          wish: row[4] || "",
-        }))
-        .filter((item) => item.wish);
+      for (let i = 0; i < csvText.length; i++) {
+        const char = csvText[i];
+        const nextChar = csvText[i + 1];
 
-      setWishes(data.reverse());
-    } catch (error) {
-      setWishesError("Gagal memuatkan ucapan. Sila cuba semula.");
-    } finally {
-      setWishesLoading(false);
-    }
-  };
+        if (char === '"' && insideQuotes && nextChar === '"') {
+          cell += '"';
+          i++;
+        } else if (char === '"') {
+          insideQuotes = !insideQuotes;
+        } else if (char === "," && !insideQuotes) {
+          row.push(cell.trim());
+          cell = "";
+        } else if ((char === "\n" || char === "\r") && !insideQuotes) {
+          if (cell || row.length) {
+            row.push(cell.trim());
+            rows.push(row);
+            row = [];
+            cell = "";
+          }
+        } else {
+          cell += char;
+        }
+      }
+
+      if (cell || row.length) {
+        row.push(cell.trim());
+        rows.push(row);
+      }
+
+      return rows;
+    };
+
+    const rows = parseCSV(text);
+
+    const data = rows
+      .slice(1)
+      .map((row) => ({
+        name: row[2] || "Tetamu",
+        wish: row[4] || "",
+      }))
+      .filter((item) => item.wish);
+
+    setWishes(data.reverse());
+  } catch (error) {
+    setWishesError("Gagal memuatkan ucapan. Sila cuba semula.");
+  } finally {
+    setWishesLoading(false);
+  }
+};
 
   useEffect(() => {
     loadWishes();
