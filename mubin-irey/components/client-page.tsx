@@ -415,7 +415,7 @@ export default function WeddingInviteMaroonCream() {
     const response = await fetch(sheetUrl);
     const text = await response.text();
 
-    const parseCSV = (csvText) => {
+    const parseCSV = (csvText: string) => {
       const rows = [];
       let row = [];
       let cell = "";
