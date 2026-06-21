@@ -913,9 +913,9 @@ export default function WeddingInviteMaroonCream() {
                       Titipan Buat Pengantin
                     </h3>
 
-                    <p className="mt-3 text-sm md:text-base leading-7 text-[#7d5c55] max-w-2xl mx-auto">
+                    {/* <p className="mt-3 text-sm md:text-base leading-7 text-[#7d5c55] max-w-2xl mx-auto">
                       Terima kasih atas ucapan, doa dan ingatan tulus daripada keluarga serta sahabat handai.
-                    </p>
+                    </p> */}
 
                     <button
                       type="button"
@@ -938,7 +938,7 @@ export default function WeddingInviteMaroonCream() {
                     )}
                   </div>
 
-                  <div className="relative mt-5 flex-1 min-h-0 overflow-hidden">
+                 <div className="relative mt-5 h-[500px] overflow-hidden">
                     <div className="h-full overflow-y-auto overflow-x-hidden pr-2 overscroll-contain scroll-smooth">
                       <div className="space-y-3">
 
@@ -969,8 +969,8 @@ export default function WeddingInviteMaroonCream() {
                       </div>
                     </div>
 
-                    <div className="pointer-events-none absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-[#fffdfb] to-transparent z-10" />
-                    <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-[#fffdfb] to-transparent z-10" />
+                    <div className="pointer-events-none absolute top-0 left-0 right-0 h-4 bg-gradient-to-b from-[#fffdfb] to-transparent z-10" />
+                    <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-[#fffdfb] to-transparent z-10" />
                   </div>
                 </PaperFrame>
               </div>
